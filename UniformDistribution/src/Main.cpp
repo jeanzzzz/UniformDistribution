@@ -23,9 +23,7 @@
 // Author:   JY Zhang	06/16/2017	@ESL
 // ----------------------------------------------------------------------
 
-#include "HRoutine.h"
-#include <iostream>
-#include "GlbParam.h"
+#include "../include/HRoutine.h"
 
 int main(int argc, char *argv[])
 {

@@ -1,4 +1,4 @@
-#include "GlbParam.h"
+#include "../include/GlbParam.h"
 
 // ---------------------------------------------
 // global variables for control parameters

@@ -1,4 +1,4 @@
-#include "TQua.h"
+#include "../include/TQua.h"
 
 // ---------------------------------------------------
 TQua::TQua(void) {

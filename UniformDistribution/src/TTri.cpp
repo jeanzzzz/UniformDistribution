@@ -1,4 +1,4 @@
-#include "TTri.h"
+#include "../include/TTri.h"
 
 // ---------------------------------------------------
 TTri::TTri(void) {

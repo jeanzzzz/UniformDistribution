@@ -1,4 +1,4 @@
-#include "HElectroStatic.h"
+#include "../include/HElectroStatic.h"
 
 HElectroStatic::HElectroStatic(void)
 {
