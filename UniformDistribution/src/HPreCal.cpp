@@ -68,10 +68,14 @@ void HPreCal::ReadMesh(void)
 	foo >> _NumTri;
 	message.Display("The number of triangles is ", _NumTri);
 	_FaceList.resize(_NumTri);
+	int a;
 	for (int ii = 0; ii < _NumTri; ii++) {
-		foo >> _FaceList[ii][1];
-		foo >> _FaceList[ii][2];
-		foo >> _FaceList[ii][3];
+		foo >> a;
+		_FaceList[ii].push_back(a);
+		foo >> a;
+		_FaceList[ii].push_back(a);
+		foo >> a;
+		_FaceList[ii].push_back(a);
 	}
 
 	foo >> _NumQua;
@@ -79,10 +83,14 @@ void HPreCal::ReadMesh(void)
 	_FaceList.resize(_NumTri + _NumQua);
 	message.Display("The number of quadrangle is ", _NumQua);
 	for (int ii = _NumTri; ii < (_NumTri+_NumQua); ii++) {
-		foo >> _FaceList[ii][1];
-		foo >> _FaceList[ii][2];
-		foo >> _FaceList[ii][3];
-		foo >> _FaceList[ii][4];
+		foo >> a;
+		_FaceList[ii].push_back(a);
+		foo >> a;
+		_FaceList[ii].push_back(a);
+		foo >> a;
+		_FaceList[ii].push_back(a);
+		foo >> a;
+		_FaceList[ii].push_back(a);
 	}
 
 	foo.close();
@@ -92,14 +100,16 @@ void HPreCal::ReadMesh(void)
 // ------------------ calculate area of the quadrangle and triangle ----------------
 double HPreCal::Area(std::vector<int> a)
 {
-	if (a.size == 3) {
-		double area = Helen(a[1], a[2], a[3]);
+	if (a.size() == 3) {
+		double area = Helen(a[0], a[1], a[2]);
+		return area;
+	} 
+	else if (a.size() == 4) {
+		double area = Helen(a[0], a[1], a[2]) + Helen(a[0], a[1], a[3]);
 		return area;
 	}
-
-	if (a.size == 4) {
-		double area = Helen(a[1], a[2], a[3]) + Helen(a[1], a[2], a[4]);
-		return area;
+	else {
+		message.Error("Wrong face structure.");
 	}
 
 
