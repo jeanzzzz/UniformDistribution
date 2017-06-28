@@ -20,10 +20,10 @@ void HPreCal::PreCalculate(void)
 	double area_qua = 0;
 	double area_total = 0;
 	for (int ii = 0; ii < _NumTri; ii++) {
-		area_tri = area_tri + Area(triList[ii]);
+		area_tri = area_tri + Area(_FaceList[ii]);
 	}
-	for (int ii = 0; ii < _NumQua; ii++) {
-		area_qua = area_qua + Area(quaList[ii]);
+	for (int ii = _NumTri; ii < (_NumTri + _NumQua); ii++) {
+		area_qua = area_qua + Area(_FaceList[ii]);
 	}
 	area_total = area_tri + area_qua;
 	message.Display("The total area is ", area_total);
@@ -53,36 +53,36 @@ void HPreCal::ReadMesh(void)
 	foo >> _NumNode;
 	message.Display("The unit is ", unit);
 	message.Display("The number of nodes is ", _NumNode);
-	nodeList.resize(_NumNode);
+	_NodeList.resize(_NumNode);
 
 	for (int ii = 0; ii < _NumNode; ii++)
 	{
-		foo >> nodeList[ii].x;
-		foo >> nodeList[ii].y;
-		foo >> nodeList[ii].z;
+		foo >> _NodeList[ii].x;
+		foo >> _NodeList[ii].y;
+		foo >> _NodeList[ii].z;
 
 		// multiply with the unit
-		nodeList[ii] = nodeList[ii] * unit;
+		_NodeList[ii] = _NodeList[ii] * unit;
 	}
 
 	foo >> _NumTri;
 	message.Display("The number of triangles is ", _NumTri);
-	triList.resize(_NumTri);
+	_FaceList.resize(_NumTri);
 	for (int ii = 0; ii < _NumTri; ii++) {
-		foo >> triList[ii].node1;
-		foo >> triList[ii].node2;
-		foo >> triList[ii].node3;
+		foo >> _FaceList[ii][1];
+		foo >> _FaceList[ii][2];
+		foo >> _FaceList[ii][3];
 	}
 
 	foo >> _NumQua;
 
-	quaList.resize(_NumQua);
+	_FaceList.resize(_NumTri + _NumQua);
 	message.Display("The number of quadrangle is ", _NumQua);
-	for (int ii = 0; ii < _NumQua; ii++) {
-		foo >> quaList[ii].node1;
-		foo >> quaList[ii].node2;
-		foo >> quaList[ii].node3;
-		foo >> quaList[ii].node4;
+	for (int ii = _NumTri; ii < (_NumTri+_NumQua); ii++) {
+		foo >> _FaceList[ii][1];
+		foo >> _FaceList[ii][2];
+		foo >> _FaceList[ii][3];
+		foo >> _FaceList[ii][4];
 	}
 
 	foo.close();
@@ -90,23 +90,27 @@ void HPreCal::ReadMesh(void)
 }
 
 // ------------------ calculate area of the quadrangle and triangle ----------------
-double HPreCal::Area(TTri a)
+double HPreCal::Area(std::vector<int> a)
 {
-	double area = Helen(a.node1, a.node2, a.node3);
-	return area;
+	if (a.size == 3) {
+		double area = Helen(a[1], a[2], a[3]);
+		return area;
+	}
+
+	if (a.size == 4) {
+		double area = Helen(a[1], a[2], a[3]) + Helen(a[1], a[2], a[4]);
+		return area;
+	}
+
+
 }
 
-double HPreCal::Area(TQua a)
-{
-	double area = Helen(a.node1, a.node2, a.node3) + Helen(a.node1, a.node2, a.node4);
-	return area;
-}
 
 double HPreCal::Helen(int a, int b, int c)
 {
-	double x = Length(nodeList[a], nodeList[b]);
-	double y = Length(nodeList[a], nodeList[c]);
-	double z = Length(nodeList[b], nodeList[c]);
+	double x = Length(_NodeList[a], _NodeList[b]);
+	double y = Length(_NodeList[a], _NodeList[c]);
+	double z = Length(_NodeList[b], _NodeList[c]);
 	double p = (x + y + z) / 2;
 	double s = sqrt(p*(p - x)*(p - y)*(p - z));
 	return s;

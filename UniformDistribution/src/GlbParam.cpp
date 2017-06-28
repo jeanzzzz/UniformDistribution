@@ -18,14 +18,14 @@ int _NumTri;
 int _NumQua;
 int _NUM;
 
-std::vector <TNode3D<REAL> > nodeList;
-std::vector <TTri> triList;
-std::vector <TQua> quaList;
+std::vector <TNode3D<REAL> > _NodeList;
+std::vector <std::vector<int> > _FaceList;
 
 // ----------------------------------------------
 // solve
 // ----------------------------------------------
-std::vector <TNode3D<REAL> > sourceList;
-std::vector <TNode3D<REAL> > velocityList;
-std::vector <double> FORCE_TOTAL;
-std::vector <std::vector<int> > nearnodeList;	
+std::vector <TNode3D<REAL> > _SourceList;
+std::vector <TNode3D<REAL> > _VelocityList;
+std::vector <double> _ForceTotal;
+std::vector <std::vector<int> > _NearNodeList;
+std::vector <std::vector<int> > _SourceLocate;

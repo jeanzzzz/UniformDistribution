@@ -20,8 +20,7 @@ public:
 public:
 	void PreCalculate(void);
 	void ReadMesh(void);
-	double Area(TTri);
-	double Area(TQua);
+	double Area(std::vector<int>);
 	double Helen(int, int, int);
 	double Length(TNode3D<REAL>, TNode3D<REAL>);
 };

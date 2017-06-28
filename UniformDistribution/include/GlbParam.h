@@ -25,17 +25,17 @@ extern int _NumTri;
 extern int _NumQua;
 extern int _NUM;
 
-extern std::vector <TNode3D<REAL> > nodeList;
-extern std::vector <TTri> triList;
-extern std::vector <TQua> quaList;
+extern std::vector <TNode3D<REAL> > _NodeList;
+extern std::vector <std::vector<int> > _FaceList;
 
 // ----------------------------------------------
 // solve
 // ----------------------------------------------
-extern std::vector <TNode3D<REAL> > sourceList;
-extern std::vector <TNode3D<REAL> > velocityList;
-extern std::vector <std::vector<int> > nearnodeList;
-extern std::vector <double> FORCE_TOTAL;
+extern std::vector <TNode3D<REAL> > _SourceList;
+extern std::vector <TNode3D<REAL> > _VelocityList;
+extern std::vector <std::vector<int> > _NearNodeList;
+extern std::vector <double> _ForceTotal;
+extern std::vector <std::vector<int> > _SourceLocate;
 
 typedef double Real;
 typedef int Integer;

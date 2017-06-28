@@ -23,7 +23,7 @@ void HOutPut::OutPut_source(std::string a)
 
 	for (int ii = 0; ii < _NUM; ii++)
 	{
-		fout << sourceList[ii].x << "\t" << sourceList[ii].y << "\t" << sourceList[ii].z << "\n";
+		fout << _SourceList[ii].x << "\t" << _SourceList[ii].y << "\t" << _SourceList[ii].z << "\n";
 	}
 
 	fout.close();
