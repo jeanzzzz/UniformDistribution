@@ -36,6 +36,7 @@ void HElectroStatic::InitializeSource(void)
 	message.Start("initializing sources");
 	message.Display("NUM is ", _NUM);
 	_SourceList.resize(_NUM);
+	_SourceLocate.resize(_NUM);
 	_VelocityList.resize(_NUM);
 
 	// initialize random numbers
@@ -49,6 +50,7 @@ void HElectroStatic::InitializeSource(void)
 	for (int ii = 0; ii < _NUM; ii++)
 	{
 		_SourceList[ii] = _NodeList[temp[ii]];
+		_SourceLocate[ii] = FindFace(temp[ii]); ///find the connected faces to each sources
 		_VelocityList[ii].x = 0;
 		_VelocityList[ii].y = 0;
 		_VelocityList[ii].z = 0;
@@ -190,3 +192,23 @@ void HElectroStatic::NearNode(void)
 // ------------------------------------------------------------------------
 // Initialize storing source on which face
 // ------------------------------------------------------------------------
+
+// ------------------------------------------------------------------------
+// find the connected faces to each sources
+// ------------------------------------------------------------------------
+std::vector<int> HElectroStatic::FindFace(int a) {
+	std::vector<int> FFace;
+#pragma omp parallel for
+	for (int ii = 0; ii < _NumTri; ii++) {
+		if ((_FaceList[ii][0] == a) || (_FaceList[ii][1] == a) || (_FaceList[ii][0] == a)) {
+			FFace.push_back(ii);
+		}
+	}
+#pragma omp parallel for
+	for (int ii = _NumTri; ii < _NumTri + _NumQua; ii++) {
+		if ((_FaceList[ii][0] == a) || (_FaceList[ii][1] == a) || (_FaceList[ii][0] == a) || (_FaceList[ii][0] == a)) {
+			FFace.push_back(ii);
+		}
+	}
+	return FFace;
+}

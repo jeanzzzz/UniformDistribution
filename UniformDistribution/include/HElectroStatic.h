@@ -23,5 +23,6 @@ public:
 	void LocationCorrection(void);
 	void LocationCorrection_near(void);
 	void NearNode(void);
+	std::vector<int> FindFace(int);
 };
 
