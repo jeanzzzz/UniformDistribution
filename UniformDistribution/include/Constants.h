@@ -18,7 +18,7 @@ const double DISTANCE_MIN = 1e-2 / pow(C, 1.0 / 2);
 //const double DISTANCE_MIN = 1e-2;
 const double STOP_FORCE			= 0.00005;					//N
 const double DENSITY			= 0.02 * C;
-const int REPEATMAX				= 50; 
+const int REPEATMAX				= 10; 
 const int NEARNODE				= 20;
 
 

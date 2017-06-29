@@ -21,7 +21,7 @@ public:
 	void InitializeSource(void);
 	double NextStatusNear(void);
 	
-
+	//location correction
 	void LocationCorrection_Node(void);
 	void LocationCorrection_Face(void);
 	void LocationCorrection_OneSource(int);
@@ -35,10 +35,7 @@ public:
 
 	//projection function
 	bool ProjectionInFace(int, int);
-	bool SameSide(TNode3D<double>,
-		TNode3D<double>,
-		TNode3D<double>,
-		TNode3D<double>);
+	bool SameSide(TNode3D<double>, TNode3D<double>, TNode3D<double>, TNode3D<double>);
 	double DistancePoint2Face(int, int);
 	TNode3D<double> GetProjection(int, int, double);
 };

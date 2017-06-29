@@ -171,13 +171,13 @@ void HElectroStatic::LocationCorrection_Node(void)
 void HElectroStatic::LocationCorrection_Face(void)
 {
 	for (int ii = 0; ii < _NUM; ii++) {
-		double distance_record = 0.1;
+		double distance_record = 0.1;// a hard code!!!!!!!!!!
 		double face_record;
 #pragma omp parallel for
 		for (int jj = 0; jj < _NumTri + _NumQua; jj++) {
 			if (ProjectionInFace(ii, jj)) {
 				double distance_temp = DistancePoint2Face(ii, jj);
-				if (distance_temp < distance_record) { // a hard code
+				if (distance_temp < distance_record) { 
 					distance_record = distance_temp;
 					face_record = jj;
 				}
@@ -185,9 +185,13 @@ void HElectroStatic::LocationCorrection_Face(void)
 		}
 		if (distance_record < 0.1) {
 			_SourceList[ii] = GetProjection(ii, face_record, distance_record);
+			_SourceLocate[ii].clear();
+			_SourceLocate[ii].push_back(face_record);
 		} 
 		else {
 			LocationCorrection_OneSource(ii);
+			_SourceLocate[ii].clear();
+			_SourceLocate[ii] = FindFace(ii);
 		}
 	}
 }
@@ -241,6 +245,7 @@ void HElectroStatic::NearNode(void)
 // find the connected faces to each sources
 // ----------------------------------
 std::vector<int> HElectroStatic::FindFace(int a) {
+	// a is the number in _SourceList
 	std::vector<int> FFace;
 #pragma omp parallel for
 	for (int ii = 0; ii < _NumTri; ii++) {
