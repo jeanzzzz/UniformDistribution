@@ -20,7 +20,7 @@ public:
 
 	void InitializeSource(void);
 	double NextStatusNear(void);
-	TNode3D<double> RadialDirection(int);
+	TNode3D<double> NormalDirection(int);
 
 	void LocationCorrection(void);
 	void LocationCorrection_near(void);

@@ -127,7 +127,7 @@ double HElectroStatic::NextStatusNear(void)
 
 	// Correct force along tangential direction
 	for (int ii = 0; ii < _NUM; ii++) {
-		TNode3D<double> radial_direction = RadialDirection(ii);
+		TNode3D<double> radial_direction = NormalDirection(ii);
 		///_LogFile << "the point is  " << _SourceList[ii].x << " " << _SourceList[ii].y << " " << _SourceList[ii].z << std::endl;
 		///_LogFile << "radial direction is  " << radial_direction.x << " " << radial_direction.y << " " << radial_direction.z << std::endl; ///to test normal
 		FORCE[ii] = FORCE[ii] - radial_direction * (radial_direction * FORCE[ii]);
@@ -220,7 +220,7 @@ std::vector<int> HElectroStatic::FindFace(int a) {
 // -----------------------------------
 // find the radial direction of a source
 // -----------------------------------
-TNode3D<double> HElectroStatic::RadialDirection(int a) {
+TNode3D<double> HElectroStatic::NormalDirection(int a) {
 	
 	/// on the face
 	if (_SourceLocate[a].size() == 1) {
