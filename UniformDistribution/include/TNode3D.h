@@ -247,7 +247,9 @@ inline TNode3D<T> TNode3D<T>::Abs(void) const {
 //-----------------------------------------------------------------
 template <class T>
 inline double TNode3D<T>::Norm(void) const {
-	return sqrt(std::abs(x) + std::abs(y) + std::abs(z));
+	double temp = 0;
+	temp = sqrt(std::abs(x)*std::abs(x) + std::abs(y)*std::abs(y) + std::abs(z)* std::abs(z));
+	return temp;
 }
 //-----------------------------------------------------------------
 template <class T>
