@@ -263,3 +263,70 @@ TNode3D<double> HElectroStatic::GetNormal(int a, int b, int c) {
 	normal.z = (p2.x - p1.x)*(p3.y - p1.y) - (p2.y - p1.y)*(p3.x - p1.x);
 	return normal;
 }
+
+// -----------------------------------
+// is the projection in the face?
+// -----------------------------------
+bool HElectroStatic::ProjectionInFace(int a, int b) {
+	// a is the number in the _SourceList
+	// b is the number in the _FaceList
+	TNode3D<double> P = _SourceList[a];
+	TNode3D<double> A = _NodeList[_FaceList[b][1]];
+	TNode3D<double> B = _NodeList[_FaceList[b][2]];
+	TNode3D<double> C = _NodeList[_FaceList[b][3]];
+
+	if (_FaceList[b].size() == 3) {
+		return SameSide(A, B, C, P) &&
+			SameSide(B, C, A, P) &&
+			SameSide(C, A, B, P);
+	}
+	else if (_FaceList[b].size() == 4) {
+		TNode3D<double> D = _NodeList[_FaceList[b][4]];
+		return SameSide(A, B, C, P) &&
+			SameSide(B, C, D, P) &&
+			SameSide(C, D, A, P) &&
+			SameSide(D, A, B, P);
+	}
+}
+
+bool HElectroStatic::SameSide(TNode3D<double> A, 
+	TNode3D<double> B, 
+	TNode3D<double> C, 
+	TNode3D<double> P) {
+
+	TNode3D<double> AB = B - A;
+	TNode3D<double> AC = C - A;
+	TNode3D<double> AP = P - A;
+
+	TNode3D<double> vector1 = AB.Cross(AC);
+	TNode3D<double> vector2 = AB.Cross(AP);
+
+	return (vector1.Dot(vector2) >= 0);
+}
+
+// -----------------------------------
+// calculate the distance
+// -----------------------------------
+double HElectroStatic::DistancePoint2Face(int a, int b) {
+	// a is the number in the _SourceList
+	// b is the number in the _FaceList
+	TNode3D<double> normal = GetNormal(_FaceList[b][0], _FaceList[b][1], _FaceList[b][2]);
+	double A = normal.x;
+	double B = normal.y;
+	double C = normal.z;
+	double D = 0 - normal.Dot(_NodeList[_FaceList[b][0]]);
+	double distance = abs(normal.Dot(_SourceList[a]) + D) / normal.AbsSquare();
+	return distance;
+}
+
+// -----------------------------------
+// calculate the projection
+// -----------------------------------
+TNode3D<double> HElectroStatic::GetProjection(int a, int b, double t) {
+	// a is the number in the _SourceList
+	// b is the number in the _FaceList
+	TNode3D<double> normal = GetNormal(_FaceList[b][0], _FaceList[b][1], _FaceList[b][2]);
+	TNode3D<double> projection;
+	projection = _SourceList[a] - normal * t;
+	return projection;
+}

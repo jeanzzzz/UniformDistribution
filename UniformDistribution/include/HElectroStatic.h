@@ -20,12 +20,24 @@ public:
 
 	void InitializeSource(void);
 	double NextStatusNear(void);
-	TNode3D<double> NormalDirection(int);
+	
 
 	void LocationCorrection(void);
 	void LocationCorrection_near(void);
 	void NearNode(void);
 	std::vector<int> FindFace(int);
+
+	//normal function
+	TNode3D<double> NormalDirection(int);
 	TNode3D<double> GetNormal(int, int, int);
+
+	//projection function
+	bool ProjectionInFace(int, int);
+	bool SameSide(TNode3D<double>,
+		TNode3D<double>,
+		TNode3D<double>,
+		TNode3D<double>);
+	double DistancePoint2Face(int, int);
+	TNode3D<double> GetProjection(int, int, double);
 };
 
