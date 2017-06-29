@@ -22,7 +22,9 @@ public:
 	double NextStatusNear(void);
 	
 
-	void LocationCorrection(void);
+	void LocationCorrection_Node(void);
+	void LocationCorrection_Face(void);
+	void LocationCorrection_OneSource(int);
 	void LocationCorrection_near(void);
 	void NearNode(void);
 	std::vector<int> FindFace(int);

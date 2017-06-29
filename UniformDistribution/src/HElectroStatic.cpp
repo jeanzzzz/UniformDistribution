@@ -22,7 +22,8 @@ void HElectroStatic::Solve(void)
 		message.Display("Start: Loop NO. ", ii);
 		_ForceTotal[ii] = NextStatusNear();
 		message.Display("The Force is ", _ForceTotal[ii]);
-		LocationCorrection();
+		//LocationCorrection_Node();
+		LocationCorrection_Face();
 		message.Display("Finish: Loop NO. ", ii);
 	}
 	message.End("Success calculating next status", -1);
@@ -149,9 +150,9 @@ double HElectroStatic::NextStatusNear(void)
 }
 
 // ------------------------------------------------------------------------
-// Location correction parallel: Point
+// Location correction parallel: Node
 // ------------------------------------------------------------------------
-void HElectroStatic::LocationCorrection(void)
+void HElectroStatic::LocationCorrection_Node(void)
 {
 	std::vector<double> distance_temp (_NumNode, 0);
 	for (int ii = 0; ii < _NUM; ii++) {
@@ -162,6 +163,45 @@ void HElectroStatic::LocationCorrection(void)
 		std::vector<double>::iterator smallest = std::min_element(std::begin(distance_temp), std::end(distance_temp));
 		_SourceList[ii] = _NodeList[std::distance(std::begin(distance_temp), smallest)];
 	}
+}
+
+// ------------------------------------------------------------------------
+// Location correction: Face
+// ------------------------------------------------------------------------
+void HElectroStatic::LocationCorrection_Face(void)
+{
+	for (int ii = 0; ii < _NUM; ii++) {
+		double distance_record = 0.1;
+		double face_record;
+#pragma omp parallel for
+		for (int jj = 0; jj < _NumTri + _NumQua; jj++) {
+			if (ProjectionInFace(ii, jj)) {
+				double distance_temp = DistancePoint2Face(ii, jj);
+				if ((distance_temp < 0.1) && (distance_temp < distance_record)) { // a hard code
+					distance_record = distance_temp;
+					face_record = jj;
+				}
+			}
+		}
+		if (distance_record != 0.1) {
+			_SourceList[ii] = GetProjection(ii, face_record, distance_record);
+		} 
+		else {
+			LocationCorrection_OneSource(ii);
+		}
+	}
+}
+
+void HElectroStatic::LocationCorrection_OneSource(int a)
+{
+	// a is the number in _SourceList
+	std::vector<double> distance_temp(_NumNode, 0);
+#pragma omp parallel for
+	for (int jj = 0; jj < _NumNode; jj++) {
+		distance_temp[jj] = sqrt((_SourceList[a] - _NodeList[jj]).AbsSquare());
+	}
+	std::vector<double>::iterator smallest = std::min_element(std::begin(distance_temp), std::end(distance_temp));
+	_SourceList[a] = _NodeList[std::distance(std::begin(distance_temp), smallest)];
 }
 
 // location correction near node: Point
@@ -289,10 +329,7 @@ bool HElectroStatic::ProjectionInFace(int a, int b) {
 	}
 }
 
-bool HElectroStatic::SameSide(TNode3D<double> A, 
-	TNode3D<double> B, 
-	TNode3D<double> C, 
-	TNode3D<double> P) {
+bool HElectroStatic::SameSide(TNode3D<double> A, TNode3D<double> B, TNode3D<double> C, TNode3D<double> P) {
 
 	TNode3D<double> AB = B - A;
 	TNode3D<double> AC = C - A;
@@ -325,6 +362,7 @@ double HElectroStatic::DistancePoint2Face(int a, int b) {
 TNode3D<double> HElectroStatic::GetProjection(int a, int b, double t) {
 	// a is the number in the _SourceList
 	// b is the number in the _FaceList
+	// t is the distance
 	TNode3D<double> normal = GetNormal(_FaceList[b][0], _FaceList[b][1], _FaceList[b][2]);
 	TNode3D<double> projection;
 	projection = _SourceList[a] - normal * t;
