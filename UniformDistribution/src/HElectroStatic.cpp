@@ -177,13 +177,13 @@ void HElectroStatic::LocationCorrection_Face(void)
 		for (int jj = 0; jj < _NumTri + _NumQua; jj++) {
 			if (ProjectionInFace(ii, jj)) {
 				double distance_temp = DistancePoint2Face(ii, jj);
-				if ((distance_temp < 0.1) && (distance_temp < distance_record)) { // a hard code
+				if (distance_temp < distance_record) { // a hard code
 					distance_record = distance_temp;
 					face_record = jj;
 				}
 			}
 		}
-		if (distance_record != 0.1) {
+		if (distance_record < 0.1) {
 			_SourceList[ii] = GetProjection(ii, face_record, distance_record);
 		} 
 		else {
@@ -311,9 +311,9 @@ bool HElectroStatic::ProjectionInFace(int a, int b) {
 	// a is the number in the _SourceList
 	// b is the number in the _FaceList
 	TNode3D<double> P = _SourceList[a];
-	TNode3D<double> A = _NodeList[_FaceList[b][1]];
-	TNode3D<double> B = _NodeList[_FaceList[b][2]];
-	TNode3D<double> C = _NodeList[_FaceList[b][3]];
+	TNode3D<double> A = _NodeList[_FaceList[b][0]];
+	TNode3D<double> B = _NodeList[_FaceList[b][1]];
+	TNode3D<double> C = _NodeList[_FaceList[b][2]];
 
 	if (_FaceList[b].size() == 3) {
 		return SameSide(A, B, C, P) &&
@@ -321,7 +321,7 @@ bool HElectroStatic::ProjectionInFace(int a, int b) {
 			SameSide(C, A, B, P);
 	}
 	else if (_FaceList[b].size() == 4) {
-		TNode3D<double> D = _NodeList[_FaceList[b][4]];
+		TNode3D<double> D = _NodeList[_FaceList[b][3]];
 		return SameSide(A, B, C, P) &&
 			SameSide(B, C, D, P) &&
 			SameSide(C, D, A, P) &&
