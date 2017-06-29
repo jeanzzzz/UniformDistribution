@@ -221,30 +221,33 @@ std::vector<int> HElectroStatic::FindFace(int a) {
 TNode3D<double> HElectroStatic::RadialDirection(int a) {
 	
 	/// on the face
-	if (_SourceLocate[a].size == 1) {
+	if (_SourceLocate[a].size() == 1) {
 		int b = _SourceLocate[a][0];
 		TNode3D<double> radial_direction = GetNormal(_FaceList[b][0], _FaceList[b][1], _FaceList[b][2]);
 		return radial_direction;
 	}
 
 	/// on the edge
-	else if (_SourceLocate[a].size == 2) {
+	else if (_SourceLocate[a].size() == 2) {
 		int b = _SourceLocate[a][0];
 		int c = _SourceLocate[a][1];
 		TNode3D<double> radial_direction1 = GetNormal(_FaceList[b][0], _FaceList[b][1], _FaceList[b][2]);
 		TNode3D<double> radial_direction2 = GetNormal(_FaceList[c][0], _FaceList[c][1], _FaceList[c][2]);
 		TNode3D<double> radial_direction = radial_direction1 + radial_direction2;
-		return radial_direction
+		return (radial_direction / radial_direction.Norm());
 	}
 
 	/// at the node
-	else if (_SourceLocate[a].size == 3) {
-		int b = _SourceLocate[a][0];
-		int c = _SourceLocate[a][1];
-		int d = _SourceLocate[a][2];
-		TNode3D<double> radial_direction = GetNormal(_FaceList[b][0], _FaceList[b][1], _FaceList[b][2]);
-		TNode3D<double> radial_direction1 = GetNormal(_FaceList[c][0], _FaceList[c][1], _FaceList[c][2]);
-		TNode3D<double> radial_direction2 = GetNormal(_FaceList[d][0], _FaceList[d][1], _FaceList[d][2]);
+	else if (_SourceLocate[a].size() >= 3) {
+		int ll = _SourceLocate[a].size();
+		TNode3D<double> radial_direction(0, 0, 0);
+		for (int ii = 0; ii < ll; ii++) {
+			radial_direction = radial_direction + 
+				GetNormal(_FaceList[_SourceLocate[a][ii]][0], 
+					_FaceList[_SourceLocate[a][ii]][1], 
+					_FaceList[_SourceLocate[a][ii]][2]);
+		}
+		return (radial_direction / radial_direction.Norm());
 	}
 }
 

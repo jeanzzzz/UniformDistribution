@@ -58,6 +58,7 @@ public:
 	T Sum() const;
 	REAL AbsSquare(void) const;
 	TNode3D<T> Abs(void) const; // OK
+	double Norm(void) const;
 	TNode3D<T> Sqrt() const;
 	TNode3D<T> Log() const;
 	TNode3D<T> Sph2Cart(void) const; // spherical coordinate to Cartesian coordinate OK
@@ -242,6 +243,11 @@ inline T TNode3D<T>::Sum() const
 template <class T>
 inline TNode3D<T> TNode3D<T>::Abs(void) const {
 	return TNode3D<T>(std::abs(x), std::abs(y), std::abs(z));
+}
+//-----------------------------------------------------------------
+template <class T>
+inline double TNode3D<T>::Norm(void) const {
+	return sqrt(std::abs(x) + std::abs(y) + std::abs(z));
 }
 //-----------------------------------------------------------------
 template <class T>
