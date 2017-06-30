@@ -66,7 +66,7 @@ public:
 
 	T Max(void); // cannot be used by complex
 	TNode3D<int> Conv2Int(void); // cannot be used by complex
-	bool InUnit(void); // here only for int, <cstdlib>
+	bool In_Unit(void); // here only for int, <cstdlib>
 	TNode2D<T> GetThetaPhiComp(T theta, T phi); // get theta phi components from Cartesian vector OK
 };
 
@@ -331,7 +331,7 @@ inline TNode3D<int> TNode3D<T>::Conv2Int(void) {
 }
 // -----------------------------------------------------------------
 template <class T>
-inline bool TNode3D<T>::InUnit(void) {
+inline bool TNode3D<T>::In_Unit(void) {
 	return ((abs(x) <= 1) && (abs(y) <= 1) && (abs(z) <= 1));
 }
 //-----------------------------------------------------------------

@@ -101,14 +101,14 @@ void HMessage::End(const std::string &str, double data) {
 	_LogFile << "\t" << str << "!" << "\tTime used:  " << dTime << "s.";
 	std::cout << "\t" << str << "!" << "\tTime used:  " << dTime << "s.";
 	double per;
-	std::string unit;
+	std::string _Unit;
 	if (data > 0) {
-		if (data < KBytes_) { per = 1;		unit = " B"; }
-		else if (data < MBytes_) { per = KBytes_;	unit = "KB"; }
-		else if (data < GBytes_) { per = MBytes_;	unit = "MB"; }
-		else { per = GBytes_;	unit = "GB"; }
-		_LogFile << "\tmemery used: " << std::right << std::setw(4) << data / per << unit << std::endl;
-		std::cout << "\tmemery used: " << std::right << std::setw(4) << data / per << unit << std::endl;
+		if (data < KBytes_) { per = 1;		_Unit = " B"; }
+		else if (data < MBytes_) { per = KBytes_;	_Unit = "KB"; }
+		else if (data < GBytes_) { per = MBytes_;	_Unit = "MB"; }
+		else { per = GBytes_;	_Unit = "GB"; }
+		_LogFile << "\tmemery used: " << std::right << std::setw(4) << data / per << _Unit << std::endl;
+		std::cout << "\tmemery used: " << std::right << std::setw(4) << data / per << _Unit << std::endl;
 	}
 	else if (data < 0) {
 		_LogFile << "\tmemery used: Un-estimated !" << std::endl;
@@ -143,24 +143,24 @@ void HMessage::Error(const std::string &str) {
 void HMessage::DisMemry(double mem, const std::string &str) {
 	if (!disp) return;
 	double per;
-	std::string unit;
+	std::string _Unit;
 	if (mem<KBytes_) {
-		per = 1;		unit = " B";
+		per = 1;		_Unit = " B";
 	}
 	else if (mem<MBytes_) {
-		per = KBytes_;	unit = "KB";
+		per = KBytes_;	_Unit = "KB";
 	}
 	else if (mem<GBytes_) {
-		per = MBytes_;	unit = "MB";
+		per = MBytes_;	_Unit = "MB";
 	}
 	else if (mem<TBytes_) {
-		per = GBytes_;	unit = "GB";
+		per = GBytes_;	_Unit = "GB";
 	}
 	else {
-		per = TBytes_;	unit = "TB";
+		per = TBytes_;	_Unit = "TB";
 	}
-	_LogFile << "\tmemery: " << std::right << std::setw(4) << mem / per << unit << str << std::endl;
-	std::cout << "\tmemery: " << std::right << std::setw(4) << mem / per << unit << str << std::endl;
+	_LogFile << "\tmemery: " << std::right << std::setw(4) << mem / per << _Unit << str << std::endl;
+	std::cout << "\tmemery: " << std::right << std::setw(4) << mem / per << _Unit << str << std::endl;
 }
 // -------------------------------------------------------------
 void HMessage::Debug(void) {

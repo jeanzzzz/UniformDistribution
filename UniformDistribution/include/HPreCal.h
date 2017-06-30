@@ -20,7 +20,7 @@ public:
 public:
 	void PreCalculate(void);
 	void ReadMesh(void);
-	
+
 	// Area
 	double Area(std::vector<int>);
 	double Helen(int, int, int);

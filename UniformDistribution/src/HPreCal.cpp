@@ -47,7 +47,7 @@ void HPreCal::PreCalculate(void)
 	return;
 }
 
-// ----------------- Read file ----------------------
+// ----------------- Read .msh file ----------------------
 void HPreCal::ReadMesh(void)
 {
 	std::string fname;
@@ -60,10 +60,10 @@ void HPreCal::ReadMesh(void)
 		exit(-1);
 	}
 
-	REAL unit;
-	foo >> unit;
+	REAL _Unit;
+	foo >> _Unit;
 	foo >> _NumNode;
-	message.Display("The unit is ", unit);
+	message.Display("The _Unit is ", _Unit);
 	message.Display("The number of nodes is ", _NumNode);
 	_NodeList.resize(_NumNode);
 
@@ -73,8 +73,8 @@ void HPreCal::ReadMesh(void)
 		foo >> _NodeList[ii].y;
 		foo >> _NodeList[ii].z;
 
-		// multiply with the unit
-		_NodeList[ii] = _NodeList[ii] * unit;
+		// multiply with the _Unit
+		_NodeList[ii] = _NodeList[ii] * _Unit;
 	}
 
 	foo >> _NumTri;
@@ -167,3 +167,4 @@ TNode3D<double> HPreCal::GetMin(std::vector<TNode3D<double> > &List) {
 void HPreCal::InitializeDomain(void) {
 
 }
+

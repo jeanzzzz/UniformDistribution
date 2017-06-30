@@ -16,7 +16,7 @@ public:
 	int node4;
 	REAL area;
 	TNode3D<REAL> center;
-	TNode3D<REAL> unitN; // unit outer normal vector
+	TNode3D<REAL> _UnitN; // _Unit outer normal vector
 
 public:
 	TQua(void); // OK

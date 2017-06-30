@@ -14,5 +14,8 @@ public:
 	HOutPut _OutPut;
 
 	void PostCalculate(void);
+	void ReadTxt(void);
+	void CombineElements(void);
+	TNode3D<double> Barycenter(std::vector<int>)
 };
 

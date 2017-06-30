@@ -18,5 +18,6 @@ public:
 	~HRoutine(void);
 
 	void RunRoutine(void);
+	void CombineElements(void);
 };
 

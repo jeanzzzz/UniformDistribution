@@ -6,7 +6,9 @@
 
 std::string _PrjName;
 std::string _FileName;
+std::string _TxtName;
 
+double __Unit;
 double _GMemory(0), _GlbTime(0), _PeakMem(0); //Global memory, time and Peak memory. 
 std::ofstream _LogFile; //The log file
 
@@ -34,3 +36,8 @@ std::vector <TNode3D<REAL> > _VelocityList;
 std::vector <double> _ForceTotal;
 std::vector <std::vector<int> > _NearNodeList;
 std::vector <std::vector<int> > _SourceLocate;
+
+// ----------------------------------------------
+// post
+// ----------------------------------------------
+std::vector <std::vector<int> > _CombineList;

@@ -13,7 +13,9 @@
 
 extern std::string _PrjName;
 extern std::string _FileName;
+extern std::string _TxtName;
 
+extern double _Unit;
 extern double _GMemory, _GlbTime, _PeakMem; //Global memory, time and Peak memory
 extern std::ofstream _LogFile; //The log file.
 
@@ -48,3 +50,8 @@ typedef int Integer;
 typedef std::complex<Real> Complex;
 typedef std::complex<double> InputComplex;
 typedef long LongInt;
+
+// ----------------------------------------------
+// post
+// ----------------------------------------------
+extern std::vector <std::vector<int> > _CombineList;
