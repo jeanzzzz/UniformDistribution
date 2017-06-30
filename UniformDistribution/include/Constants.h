@@ -20,7 +20,7 @@ const double STOP_FORCE			= 0.00005;					//N
 const double DENSITY			= 0.02 * C;
 const int REPEATMAX				= 10; 
 const int NEARNODE				= 20;
-const int MAXMOVE = 0.3;
+const int MAXMOVE = 1;
 
 
 // Physics parameters

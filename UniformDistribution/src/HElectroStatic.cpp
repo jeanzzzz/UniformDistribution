@@ -172,7 +172,7 @@ void HElectroStatic::LocationCorrection_Node(void)
 void HElectroStatic::LocationCorrection_Face(void)
 {
 	for (int ii = 0; ii < _NUM; ii++) {
-		double distance_record = 0.1;// a hard code!!!!!!!!!!
+		double distance_record = 0.3;// a hard code!!!!!!!!!!
 		double face_record;
 #pragma omp parallel for
 		for (int jj = 0; jj < _NumTri + _NumQua; jj++) {
@@ -184,7 +184,7 @@ void HElectroStatic::LocationCorrection_Face(void)
 				}
 			}
 		}
-		if (distance_record < 0.1) {
+		if (distance_record < 0.3) {
 			_SourceList[ii] = GetProjection(ii, face_record, distance_record);
 			_SourceLocate[ii].clear();
 			_SourceLocate[ii].push_back(face_record);
