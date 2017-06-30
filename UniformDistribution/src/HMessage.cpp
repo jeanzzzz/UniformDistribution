@@ -71,6 +71,14 @@ void HMessage::Display(const std::string &str, double data) {
 	return;
 }
 
+void HMessage::Display(const std::string &str, TNode3D<double> data) {
+	if (!disp) return;
+	_LogFile << "\t" << str << data.x << " " << data.y << " " << data.z << std::endl;
+	std::cout << "\t" << str << data.x << " " << data.y << " " << data.z << std::endl;
+
+	return;
+}
+
 //-------------- show the start of a process -----------------
 void HMessage::Start(const std::string &str) {
 	if (!disp) return;

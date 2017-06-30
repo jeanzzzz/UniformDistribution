@@ -21,6 +21,9 @@ int _NUM;
 std::vector <TNode3D<REAL> > _NodeList;
 std::vector <std::vector<int> > _FaceList;
 
+TNode3D<double> _Max;
+TNode3D<double> _Min;
+
 // ----------------------------------------------
 // solve
 // ----------------------------------------------

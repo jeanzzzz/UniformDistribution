@@ -23,4 +23,6 @@ public:
 	double Area(std::vector<int>);
 	double Helen(int, int, int);
 	double Length(TNode3D<REAL>, TNode3D<REAL>);
+	TNode3D<double> GetMax(std::vector<TNode3D<double> > &List);
+	TNode3D<double> GetMin(std::vector<TNode3D<double> > &List);
 };

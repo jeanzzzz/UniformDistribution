@@ -28,6 +28,9 @@ extern int _NUM;
 extern std::vector <TNode3D<REAL> > _NodeList;
 extern std::vector <std::vector<int> > _FaceList;
 
+extern TNode3D<double> _Max;
+extern TNode3D<double> _Min;
+
 // ----------------------------------------------
 // solve
 // ----------------------------------------------

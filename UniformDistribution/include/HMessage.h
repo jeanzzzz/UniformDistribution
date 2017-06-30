@@ -35,6 +35,7 @@ public:
 	void Display(const std::string &str);
 	void Display(const std::string &str, int data);
 	void Display(const std::string &str, double data);
+	void Display(const std::string &str, TNode3D<double> data);
 
 	void DisMemry(double mem, const std::string &str);
 	void Debug(void);

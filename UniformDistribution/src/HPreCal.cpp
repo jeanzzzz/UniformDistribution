@@ -15,6 +15,12 @@ void HPreCal::PreCalculate(void)
 {
 	ReadMesh();
 	
+	// calculate max and min coordinate
+	_Max = GetMax(_NodeList);
+	_Min = GetMin(_NodeList);
+	message.Display("The max coordinate is ", _Max);
+	message.Display("The min coordinate is ", _Min);
+
 	// calculate area 
 	double area_tri = 0;
 	double area_qua = 0;
@@ -114,8 +120,6 @@ double HPreCal::Area(std::vector<int> a)
 
 
 }
-
-
 double HPreCal::Helen(int a, int b, int c)
 {
 	double x = Length(_NodeList[a], _NodeList[b]);
@@ -125,11 +129,30 @@ double HPreCal::Helen(int a, int b, int c)
 	double s = sqrt(p*(p - x)*(p - y)*(p - z));
 	return s;
 }
-
 double HPreCal::Length(TNode3D<REAL> T1, TNode3D<REAL> T2)
 {
 	double len = sqrt((T1.x - T2.x)*(T1.x - T2.x)
 		+ (T1.y - T2.y)*(T1.y - T2.y)
 		+ (T1.z - T2.z)*(T1.z - T2.z));
 	return len;
+}
+
+// ----------------- Get max and min from _NodeList -----------------
+TNode3D<double> HPreCal::GetMax(std::vector<TNode3D<double> > &List) {
+	TNode3D<double> max_temp = List[0];
+	for (int ii = 0; ii < _NumNode; ii++) {
+		max_temp.x = (max_temp.x < List[ii].x) ? List[ii].x : max_temp.x;
+		max_temp.y = (max_temp.y < List[ii].y) ? List[ii].y : max_temp.y;
+		max_temp.z = (max_temp.z < List[ii].z) ? List[ii].z : max_temp.z;
+	}
+	return max_temp;
+}
+TNode3D<double> HPreCal::GetMin(std::vector<TNode3D<double> > &List) {
+	TNode3D<double> min_temp = List[0];
+	for (int ii = 0; ii < _NumNode; ii++) {
+		min_temp.x = (min_temp.x > List[ii].x) ? List[ii].x : min_temp.x;
+		min_temp.y = (min_temp.y > List[ii].y) ? List[ii].y : min_temp.y;
+		min_temp.z = (min_temp.z > List[ii].z) ? List[ii].z : min_temp.z;
+	}
+	return min_temp;
 }
