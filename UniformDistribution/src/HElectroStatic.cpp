@@ -3,15 +3,13 @@
 HElectroStatic::HElectroStatic(void)
 {
 }
-
 HElectroStatic::~HElectroStatic(void)
 {
 }
-
 void HElectroStatic::Solve(void)
 {
 	InitializeSource();
-	
+
 	// -----------------------------------------
 	// calculate next status until electrostatic
 	// -----------------------------------------
@@ -196,7 +194,6 @@ void HElectroStatic::LocationCorrection_Face(void)
 		}
 	}
 }
-
 void HElectroStatic::LocationCorrection_OneSource(int a)
 {
 	// a is the number in _SourceList
@@ -222,7 +219,6 @@ void HElectroStatic::LocationCorrection_near(void)
 		_SourceList[ii] = _NodeList[std::distance(std::begin(distance_temp), smallest)];
 	}
 }
-
 void HElectroStatic::NearNode(void)
 {
 	_NearNodeList.resize(_NumNode, std::vector<int>(NEARNODE));
@@ -242,9 +238,9 @@ void HElectroStatic::NearNode(void)
 // Initialize storing source on which face
 // ------------------------------------------------------------------------
 
-// ----------------------------------
+// -----------------------------------
 // find the connected faces to each sources
-// ----------------------------------
+// -----------------------------------
 std::vector<int> HElectroStatic::FindFace(int a) {
 	// a is the number in _SourceList
 	std::vector<int> FFace;
@@ -298,7 +294,6 @@ TNode3D<double> HElectroStatic::NormalDirection(int a) {
 		return (radial_direction / radial_direction.Norm());
 	}
 }
-
 TNode3D<double> HElectroStatic::GetNormal(int a, int b, int c) {
 	TNode3D<double> normal;
 	TNode3D<double> p1 = _NodeList[a]; ///point
@@ -334,7 +329,6 @@ bool HElectroStatic::ProjectionInFace(int a, int b) {
 			SameSide(D, A, B, P);
 	}
 }
-
 bool HElectroStatic::SameSide(TNode3D<double> A, TNode3D<double> B, TNode3D<double> C, TNode3D<double> P) {
 
 	TNode3D<double> AB = B - A;
