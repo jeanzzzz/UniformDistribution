@@ -24,6 +24,8 @@ std::vector <std::vector<int> > _FaceList;
 TNode3D<double> _Max;
 TNode3D<double> _Min;
 
+std::vector <std::vector<std::vector <std::vector <int> > > > _NodeDomain;
+
 // ----------------------------------------------
 // solve
 // ----------------------------------------------

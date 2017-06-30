@@ -31,6 +31,8 @@ extern std::vector <std::vector<int> > _FaceList;
 extern TNode3D<double> _Max;
 extern TNode3D<double> _Min;
 
+extern std::vector <std::vector<std::vector <std::vector <int> > > > _NodeDomain;
+
 // ----------------------------------------------
 // solve
 // ----------------------------------------------

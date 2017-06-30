@@ -38,6 +38,12 @@ void HPreCal::PreCalculate(void)
 	_NUM = round(DENSITY * area_total / (LAMBDA*LAMBDA));
 	message.Display("The number of sample sources is ", _NUM);
 	message.Display("Finish pre-calculation");
+	
+	// initialize a structure to store nodes
+	// Here I divide the domain into square parts and store the NO. of nodes inside the square
+	InitializeDomain();
+
+
 	return;
 }
 
@@ -155,4 +161,9 @@ TNode3D<double> HPreCal::GetMin(std::vector<TNode3D<double> > &List) {
 		min_temp.z = (min_temp.z > List[ii].z) ? List[ii].z : min_temp.z;
 	}
 	return min_temp;
+}
+
+// ------------------ Get domain ------------------------
+void HPreCal::InitializeDomain(void) {
+
 }

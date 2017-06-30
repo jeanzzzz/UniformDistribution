@@ -20,9 +20,16 @@ public:
 public:
 	void PreCalculate(void);
 	void ReadMesh(void);
+	
+	// Area
 	double Area(std::vector<int>);
 	double Helen(int, int, int);
 	double Length(TNode3D<REAL>, TNode3D<REAL>);
+	
+	// get coordinate
 	TNode3D<double> GetMax(std::vector<TNode3D<double> > &List);
 	TNode3D<double> GetMin(std::vector<TNode3D<double> > &List);
+
+	// domain
+	void InitializeDomain(void);
 };

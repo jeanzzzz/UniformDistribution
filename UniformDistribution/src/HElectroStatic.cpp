@@ -131,7 +131,8 @@ double HElectroStatic::NextStatusNear(void)
 		TNode3D<double> radial_direction = NormalDirection(ii);
 		///_LogFile << "the point is  " << _SourceList[ii].x << " " << _SourceList[ii].y << " " << _SourceList[ii].z << std::endl;
 		///_LogFile << "radial direction is  " << radial_direction.x << " " << radial_direction.y << " " << radial_direction.z << std::endl; ///to test normal
-		FORCE[ii] = FORCE[ii] - radial_direction * (radial_direction * FORCE[ii]);
+		TNode3D<double> FORCE_temp = FORCE[ii] - radial_direction * (radial_direction * FORCE[ii]);
+		FORCE[ii] = (FORCE_temp.Norm() > MAXMOVE) ? FORCE_temp * MAXMOVE / FORCE_temp.Norm() : FORCE_temp; 
 	}
 
 	// update source location and velocity
