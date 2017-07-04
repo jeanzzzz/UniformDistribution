@@ -12,5 +12,6 @@ public:
 	HMessage message;
 
 	void OutPut_source(std::string);
+	void OutPut_CombinedElement(std::string);
 };
 

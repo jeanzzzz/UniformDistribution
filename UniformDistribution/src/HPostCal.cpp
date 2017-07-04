@@ -18,7 +18,7 @@ void HPostCal::PostCalculate(void)
 
 	// combine elements
 	CombineElements();
-
+	_OutPut.OutPut_CombinedElement("test");
 	message.End("OK!", -1); //////////
 
 	return;
@@ -27,11 +27,11 @@ void HPostCal::PostCalculate(void)
 // --------------- Combine elements --------------------
 void HPostCal::CombineElements(void) {
 	_CombineList.resize(_NUM);
-	for (int ii = 0; ii < _NumTri + _NumQua; ii++) {
+	for (int ii = 0; ii < (_NumTri + _NumQua); ii++) {
 		TNode3D<double> barycenter = Barycenter(_FaceList[ii]);
 		int closest_source = 0;
 		double closest_distance = (barycenter - _SourceList[0]).Norm();
-		for (int jj = 0; jj < _NUM; jj++) {
+		for (int jj = 1; jj < _NUM; jj++) {
 			double distance_temp = (barycenter - _SourceList[jj]).Norm();
 			if (distance_temp < closest_distance) {
 				closest_distance = distance_temp;
@@ -40,14 +40,13 @@ void HPostCal::CombineElements(void) {
 		}
 		_CombineList[closest_source].push_back(ii);
 	}
-
 }
 TNode3D<double> HPostCal::Barycenter(std::vector<int> vv) {
 	TNode3D<double> barycenter = (0, 0, 0);
-	for (int ii = 0; ii < vv.size(); ii++) {
-		barycenter = barycenter + vv[ii];
+	for (int kk = 0; kk < vv.size(); kk++) {
+		barycenter = barycenter + _NodeelemList[vv[kk]];
 	}
-	return barycenter / vv.size();
+	return (barycenter / vv.size());
 }
 
 // ------------------ Read .txt ------------------------
