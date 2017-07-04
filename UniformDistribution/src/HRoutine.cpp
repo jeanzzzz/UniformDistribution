@@ -36,7 +36,7 @@ void HRoutine::RunRoutine(void)
 	}
 	
 	// Post-processing
-	postCal.PostCalsculate();
+	postCal.PostCalculate();
 
 	message.EndProj();
 	return;
