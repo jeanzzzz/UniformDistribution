@@ -32,10 +32,11 @@ void HRoutine::RunRoutine(void)
 		message.Display("Find result file: ");
 		message.Display(fname);
 		postCal.ReadTxt();
+		postCal.SourceLocate();
 	}
 	
 	// Post-processing
-	postCal.PostCalculate();
+	postCal.PostCalsculate();
 
 	message.EndProj();
 	return;

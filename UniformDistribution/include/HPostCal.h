@@ -17,5 +17,9 @@ public:
 	void ReadTxt(void);
 	void CombineElements(void);
 	TNode3D<double> Barycenter(std::vector<int> v);
+
+	bool SameSide(int, int);
+	TNode3D<double> GetNormal(int, int, int);
+	void SourceLocate(void);
 };
 
