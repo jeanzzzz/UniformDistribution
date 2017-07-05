@@ -143,24 +143,24 @@ void HMessage::Error(const std::string &str) {
 void HMessage::DisMemry(double mem, const std::string &str) {
 	if (!disp) return;
 	double per;
-	std::string _Unit;
+	std::string unit;
 	if (mem<KBytes_) {
-		per = 1;		_Unit = " B";
+		per = 1;		unit = " B";
 	}
 	else if (mem<MBytes_) {
-		per = KBytes_;	_Unit = "KB";
+		per = KBytes_;	unit = "KB";
 	}
 	else if (mem<GBytes_) {
-		per = MBytes_;	_Unit = "MB";
+		per = MBytes_;	unit = "MB";
 	}
 	else if (mem<TBytes_) {
-		per = GBytes_;	_Unit = "GB";
+		per = GBytes_;	unit = "GB";
 	}
 	else {
-		per = TBytes_;	_Unit = "TB";
+		per = TBytes_;	unit = "TB";
 	}
-	_LogFile << "\tmemery: " << std::right << std::setw(4) << mem / per << _Unit << str << std::endl;
-	std::cout << "\tmemery: " << std::right << std::setw(4) << mem / per << _Unit << str << std::endl;
+	_LogFile << "\tmemery: " << std::right << std::setw(4) << mem / per << unit << str << std::endl;
+	std::cout << "\tmemery: " << std::right << std::setw(4) << mem / per << unit << str << std::endl;
 }
 // -------------------------------------------------------------
 void HMessage::Debug(void) {
