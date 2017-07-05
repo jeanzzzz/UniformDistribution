@@ -20,8 +20,8 @@ void HElectroStatic::Solve(void)
 		message.Display("Start: Loop NO. ", ii);
 		_ForceTotal[ii] = NextStatusNear();
 		message.Display("The Force is ", _ForceTotal[ii]);
-		//LocationCorrection_Node();
-		LocationCorrection_Face();
+		LocationCorrection_Node();
+		//LocationCorrection_Face();
 		message.Display("Finish: Loop NO. ", ii);
 	}
 	message.End("Success calculating next status", -1);
@@ -115,13 +115,13 @@ double HElectroStatic::NextStatusNear(void)
 	for (int ii = 0; ii < _NUM; ii++) {
 		FORCE[ii] = 0;
 		for (int jj = 0; jj < _NUM; jj++) {
-			distance_temp = sqrt((_SourceList[ii] - _SourceList[jj]).AbsSquare());
+			distance_temp = (_SourceList[ii] - _SourceList[jj]).Norm();
 			distance_temp = (distance_temp < DISTANCE_MIN) ? DISTANCE_MIN : distance_temp;
 			distance_temp = (distance_temp > DISTANCE_MAX) ? INFINITY : distance_temp;
 			rr_temp = (_SourceList[ii] - _SourceList[jj]) / distance_temp;
 			FORCE[ii] = FORCE[ii] + rr_temp * COULOMB_CONSTANT * CHARGE * CHARGE / (distance_temp * distance_temp);
 		}
-		_ForceTotal_temp = _ForceTotal_temp + sqrt( FORCE[ii].AbsSquare());
+		_ForceTotal_temp = _ForceTotal_temp + FORCE[ii].Norm();
 	}
 
 	// Correct force along tangential direction
@@ -161,6 +161,8 @@ void HElectroStatic::LocationCorrection_Node(void)
 		}
 		std::vector<double>::iterator smallest = std::min_element(std::begin(distance_temp), std::end(distance_temp));
 		_SourceList[ii] = _NodeList[std::distance(std::begin(distance_temp), smallest)];
+		_SourceLocate[ii].clear();
+		_SourceLocate[ii] = FindFace(ii);
 	}
 }
 
@@ -200,11 +202,12 @@ void HElectroStatic::LocationCorrection_OneSource(int a)
 	std::vector<double> distance_temp(_NumNode, 0);
 #pragma omp parallel for
 	for (int jj = 0; jj < _NumNode; jj++) {
-		distance_temp[jj] = sqrt((_SourceList[a] - _NodeList[jj]).AbsSquare());
+		distance_temp[jj] = (_SourceList[a] - _NodeList[jj]).Norm();
 	}
 	std::vector<double>::iterator smallest = std::min_element(std::begin(distance_temp), std::end(distance_temp));
 	_SourceList[a] = _NodeList[std::distance(std::begin(distance_temp), smallest)];
 }
+
 
 // location correction near node: Point
 void HElectroStatic::LocationCorrection_near(void)
@@ -213,7 +216,7 @@ void HElectroStatic::LocationCorrection_near(void)
 	for (int ii = 0; ii < _NUM; ii++) {
 		for (int kk = 0; kk < NEARNODE; kk++) {
 			int jj = _NearNodeList[ii][kk];
-			distance_temp[jj] = sqrt((_SourceList[ii] - _NodeList[jj]).AbsSquare());
+			distance_temp[jj] = (_SourceList[ii] - _NodeList[jj]).Norm();
 		}
 		std::vector<double>::iterator smallest = std::max_element(std::begin(distance_temp), std::end(distance_temp));
 		_SourceList[ii] = _NodeList[std::distance(std::begin(distance_temp), smallest)];
@@ -244,15 +247,15 @@ void HElectroStatic::NearNode(void)
 std::vector<int> HElectroStatic::FindFace(int a) {
 	// a is the number in _SourceList
 	std::vector<int> FFace;
-#pragma omp parallel for
+//#pragma omp parallel for
 	for (int ii = 0; ii < _NumTri; ii++) {
-		if ((_FaceList[ii][0] == a) || (_FaceList[ii][1] == a) || (_FaceList[ii][0] == a)) {
+		if ((_FaceList[ii][0] == a) || (_FaceList[ii][1] == a) || (_FaceList[ii][2] == a)) {
 			FFace.push_back(ii);
 		}
 	}
-#pragma omp parallel for
+//#pragma omp parallel for
 	for (int ii = _NumTri; ii < _NumTri + _NumQua; ii++) {
-		if ((_FaceList[ii][0] == a) || (_FaceList[ii][1] == a) || (_FaceList[ii][0] == a) || (_FaceList[ii][0] == a)) {
+		if ((_FaceList[ii][0] == a) || (_FaceList[ii][1] == a) || (_FaceList[ii][2] == a) || (_FaceList[ii][3] == a)) {
 			FFace.push_back(ii);
 		}
 	}
@@ -302,7 +305,7 @@ TNode3D<double> HElectroStatic::GetNormal(int a, int b, int c) {
 	normal.x = (p2.y - p1.y)*(p3.z - p2.z) - (p2.z - p1.z)*(p3.y - p1.y);
 	normal.y = (p2.z - p1.z)*(p3.x - p1.x) - (p2.x - p1.x)*(p3.z - p1.z);
 	normal.z = (p2.x - p1.x)*(p3.y - p1.y) - (p2.y - p1.y)*(p3.x - p1.x);
-	return normal;
+	return normal/normal.Norm();
 }
 
 // -----------------------------------

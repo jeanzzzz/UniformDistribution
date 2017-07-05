@@ -81,7 +81,7 @@ bool HPostCal::SameSide(int a, int b) {
 	TNode3D<double> normal_1 = GetNormal(_FaceList[a][0], _FaceList[a][1], _FaceList[a][2]);
 	int c = _SourceLocate[b][0];
 	TNode3D<double> normal_2 = GetNormal(_FaceList[c][0], _FaceList[c][1], _FaceList[c][2]);
-	return (normal_1.Dot(normal_2) > 0);
+	return (normal_1.Dot(normal_2) > -0.5);
 }
 
 TNode3D<double> HPostCal::GetNormal(int a, int b, int c) {
@@ -92,7 +92,7 @@ TNode3D<double> HPostCal::GetNormal(int a, int b, int c) {
 	normal.x = (p2.y - p1.y)*(p3.z - p2.z) - (p2.z - p1.z)*(p3.y - p1.y);
 	normal.y = (p2.z - p1.z)*(p3.x - p1.x) - (p2.x - p1.x)*(p3.z - p1.z);
 	normal.z = (p2.x - p1.x)*(p3.y - p1.y) - (p2.y - p1.y)*(p3.x - p1.x);
-	return normal;
+	return normal/normal.Norm();
 }
 
 void HPostCal::SourceLocate(void) {
