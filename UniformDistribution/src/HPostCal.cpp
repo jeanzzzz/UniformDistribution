@@ -34,7 +34,8 @@ void HPostCal::CombineElements(void) {
 		double closest_distance = (barycenter - _SourceList[0]).Norm();
 		for (int jj = 1; jj < _NUM; jj++) {
 			double distance_temp = (barycenter - _SourceList[jj]).Norm();
-			if ((distance_temp < closest_distance) && SameSide(ii, jj)){
+			//if ((distance_temp < closest_distance) && SameSide(ii, jj)){
+			if (distance_temp < closest_distance){
 				closest_distance = distance_temp;
 				closest_source = jj;
 			}
@@ -81,7 +82,7 @@ bool HPostCal::SameSide(int a, int b) {
 	TNode3D<double> normal_1 = GetNormal(_FaceList[a][0], _FaceList[a][1], _FaceList[a][2]);
 	int c = _SourceLocate[b][0];
 	TNode3D<double> normal_2 = GetNormal(_FaceList[c][0], _FaceList[c][1], _FaceList[c][2]);
-	return (normal_1.Dot(normal_2) > -0.5);
+	return (normal_1.Dot(normal_2) > -0);
 }
 
 TNode3D<double> HPostCal::GetNormal(int a, int b, int c) {

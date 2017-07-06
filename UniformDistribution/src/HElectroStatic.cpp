@@ -20,7 +20,7 @@ void HElectroStatic::Solve(void)
 		message.Display("Start: Loop NO. ", ii);
 		_ForceTotal[ii] = NextStatusNear();
 		message.Display("The Force is ", _ForceTotal[ii]);
-		LocationCorrection_Node();
+		LocationCorrection_Face();
 		//LocationCorrection_Face();
 		message.Display("Finish: Loop NO. ", ii);
 	}
@@ -114,7 +114,7 @@ double HElectroStatic::NextStatusNear(void)
 	TNode3D<REAL> rr_temp;
 	for (int ii = 0; ii < _NUM; ii++) {
 		FORCE[ii] = 0;
-		for (int jj = 0; jj < _NUM; jj++) {
+		for (int jj = 0; ((jj < _NUM)&&(jj != ii)); jj++){
 			distance_temp = (_SourceList[ii] - _SourceList[jj]).Norm();
 			distance_temp = (distance_temp < DISTANCE_MIN) ? DISTANCE_MIN : distance_temp;
 			distance_temp = (distance_temp > DISTANCE_MAX) ? INFINITY : distance_temp;
@@ -130,7 +130,7 @@ double HElectroStatic::NextStatusNear(void)
 		///_LogFile << "the point is  " << _SourceList[ii].x << " " << _SourceList[ii].y << " " << _SourceList[ii].z << std::endl;
 		///_LogFile << "radial direction is  " << radial_direction.x << " " << radial_direction.y << " " << radial_direction.z << std::endl; ///to test normal
 		TNode3D<double> FORCE_temp = FORCE[ii] - radial_direction * (radial_direction * FORCE[ii]);
-		FORCE[ii] = (FORCE_temp.Norm() > MAXMOVE) ? FORCE_temp * MAXMOVE / FORCE_temp.Norm() : FORCE_temp; 
+		FORCE[ii] = (FORCE_temp.Norm() > MAXMOVE) ? FORCE_temp * MAXMOVE / FORCE_temp.Norm() : FORCE_temp;
 	}
 
 	// update source location and velocity
@@ -145,7 +145,7 @@ double HElectroStatic::NextStatusNear(void)
 		//this will determine how _SourceList will be updated: before or after
 		_SourceList[ii] = _SourceList[ii] + _VelocityList[ii];
 	}
-	return (_ForceTotal_temp/_NUM);
+	return (_ForceTotal_temp / _NUM);
 }
 
 // ------------------------------------------------------------------------
@@ -153,7 +153,7 @@ double HElectroStatic::NextStatusNear(void)
 // ------------------------------------------------------------------------
 void HElectroStatic::LocationCorrection_Node(void)
 {
-	std::vector<double> distance_temp (_NumNode, 0);
+	std::vector<double> distance_temp(_NumNode, 0);
 	for (int ii = 0; ii < _NUM; ii++) {
 #pragma omp parallel for
 		for (int jj = 0; jj < _NumNode; jj++) {
@@ -178,17 +178,17 @@ void HElectroStatic::LocationCorrection_Face(void)
 		for (int jj = 0; jj < _NumTri + _NumQua; jj++) {
 			if (ProjectionInFace(ii, jj)) {
 				double distance_temp = DistancePoint2Face(ii, jj);
-				if (distance_temp < distance_record) { 
+				if (distance_temp < distance_record) {
 					distance_record = distance_temp;
 					face_record = jj;
 				}
 			}
 		}
-		if (distance_record < 0.3) {
+		if (distance_record < 0.5) {
 			_SourceList[ii] = GetProjection(ii, face_record, distance_record);
 			_SourceLocate[ii].clear();
 			_SourceLocate[ii].push_back(face_record);
-		} 
+		}
 		else {
 			LocationCorrection_OneSource(ii);
 			_SourceLocate[ii].clear();
@@ -247,13 +247,13 @@ void HElectroStatic::NearNode(void)
 std::vector<int> HElectroStatic::FindFace(int a) {
 	// a is the number in _SourceList
 	std::vector<int> FFace;
-//#pragma omp parallel for
+	//#pragma omp parallel for
 	for (int ii = 0; ii < _NumTri; ii++) {
 		if ((_FaceList[ii][0] == a) || (_FaceList[ii][1] == a) || (_FaceList[ii][2] == a)) {
 			FFace.push_back(ii);
 		}
 	}
-//#pragma omp parallel for
+	//#pragma omp parallel for
 	for (int ii = _NumTri; ii < _NumTri + _NumQua; ii++) {
 		if ((_FaceList[ii][0] == a) || (_FaceList[ii][1] == a) || (_FaceList[ii][2] == a) || (_FaceList[ii][3] == a)) {
 			FFace.push_back(ii);
@@ -266,9 +266,9 @@ std::vector<int> HElectroStatic::FindFace(int a) {
 // find the radial direction of a source
 // -----------------------------------
 TNode3D<double> HElectroStatic::NormalDirection(int a) {
-	
+
 	/// on the face
-	if (_SourceLocate[a].size() == 1) {
+	/*if (_SourceLocate[a].size() == 1) {
 		int b = _SourceLocate[a][0];
 		TNode3D<double> radial_direction = GetNormal(_FaceList[b][0], _FaceList[b][1], _FaceList[b][2]);
 		return radial_direction / radial_direction.Norm();
@@ -285,17 +285,17 @@ TNode3D<double> HElectroStatic::NormalDirection(int a) {
 	}
 
 	/// at the node
-	else if (_SourceLocate[a].size() >= 3) {
+	else if (_SourceLocate[a].size() >= 3) {*/
 		int ll = _SourceLocate[a].size();
 		TNode3D<double> radial_direction(0, 0, 0);
 		for (int ii = 0; ii < ll; ii++) {
-			radial_direction = radial_direction + 
-				GetNormal(_FaceList[_SourceLocate[a][ii]][0], 
-					_FaceList[_SourceLocate[a][ii]][1], 
+			radial_direction = radial_direction +
+				GetNormal(_FaceList[_SourceLocate[a][ii]][0],
+					_FaceList[_SourceLocate[a][ii]][1],
 					_FaceList[_SourceLocate[a][ii]][2]);
 		}
 		return (radial_direction / radial_direction.Norm());
-	}
+	//}
 }
 TNode3D<double> HElectroStatic::GetNormal(int a, int b, int c) {
 	TNode3D<double> normal;
@@ -305,7 +305,7 @@ TNode3D<double> HElectroStatic::GetNormal(int a, int b, int c) {
 	normal.x = (p2.y - p1.y)*(p3.z - p2.z) - (p2.z - p1.z)*(p3.y - p1.y);
 	normal.y = (p2.z - p1.z)*(p3.x - p1.x) - (p2.x - p1.x)*(p3.z - p1.z);
 	normal.z = (p2.x - p1.x)*(p3.y - p1.y) - (p2.y - p1.y)*(p3.x - p1.x);
-	return normal/normal.Norm();
+	return normal / normal.Norm();
 }
 
 // -----------------------------------
