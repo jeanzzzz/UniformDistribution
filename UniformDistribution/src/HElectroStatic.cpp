@@ -21,7 +21,7 @@ void HElectroStatic::Solve(void)
 		_ForceTotal[ii] = NextStatusNear();
 		message.Display("The Force is ", _ForceTotal[ii]);
 		LocationCorrection_Face();
-		//LocationCorrection_Face();
+		//LocationCorrection_Node();
 		message.Display("Finish: Loop NO. ", ii);
 	}
 	message.End("Success calculating next status", -1);
@@ -174,7 +174,7 @@ void HElectroStatic::LocationCorrection_Node(void)
 void HElectroStatic::LocationCorrection_Face(void)
 {
 	for (int ii = 0; ii < _NUM; ii++) {
-		double distance_record = 0.3;// a hard code!!!!!!!!!!
+		double distance_record = 10;// a hard code!!!!!!!!!!
 		double face_record;
 #pragma omp parallel for
 		for (int jj = 0; jj < _NumTri + _NumQua; jj++) {
@@ -186,7 +186,7 @@ void HElectroStatic::LocationCorrection_Face(void)
 				}
 			}
 		}
-		if (distance_record < 0.5) {
+		if (distance_record < 1) {
 			_SourceList[ii] = GetProjection(ii, face_record, distance_record);
 			_SourceLocate[ii].clear();
 			_SourceLocate[ii].push_back(face_record);
@@ -360,7 +360,7 @@ double HElectroStatic::DistancePoint2Face(int a, int b) {
 	double B = normal.y;
 	double C = normal.z;
 	double D = 0 - normal.Dot(_NodeList[_FaceList[b][0]]);
-	double distance = abs(normal.Dot(_SourceList[a]) + D) / normal.AbsSquare();
+	double distance = abs(normal.Dot(_SourceList[a]) + D) / normal.Norm();
 	return distance;
 }
 
@@ -372,7 +372,8 @@ TNode3D<double> HElectroStatic::GetProjection(int a, int b, double t) {
 	// b is the number in the _FaceList
 	// t is the distance
 	TNode3D<double> normal = GetNormal(_FaceList[b][0], _FaceList[b][1], _FaceList[b][2]);
-	TNode3D<double> projection;
-	projection = _SourceList[a] - normal * t;
+	double D = 0 - normal.Dot(_NodeList[_FaceList[b][0]]);
+	double tt = (normal.Dot(_SourceList[a]) + D) / normal.AbsSquare();
+	TNode3D<double> projection = _SourceList[a] - normal * tt;
 	return projection;
 }
