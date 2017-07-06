@@ -114,12 +114,14 @@ double HElectroStatic::NextStatusNear(void)
 	TNode3D<REAL> rr_temp;
 	for (int ii = 0; ii < _NUM; ii++) {
 		FORCE[ii] = 0;
-		for (int jj = 0; ((jj < _NUM)&&(jj != ii)); jj++){
-			distance_temp = (_SourceList[ii] - _SourceList[jj]).Norm();
-			distance_temp = (distance_temp < DISTANCE_MIN) ? DISTANCE_MIN : distance_temp;
-			distance_temp = (distance_temp > DISTANCE_MAX) ? INFINITY : distance_temp;
-			rr_temp = (_SourceList[ii] - _SourceList[jj]) / distance_temp;
-			FORCE[ii] = FORCE[ii] + rr_temp * COULOMB_CONSTANT * CHARGE * CHARGE / (distance_temp * distance_temp);
+		for (int jj = 0; (jj < _NUM); jj++){
+			if (jj != ii) {
+				distance_temp = (_SourceList[ii] - _SourceList[jj]).Norm();
+				distance_temp = (distance_temp < DISTANCE_MIN) ? DISTANCE_MIN : distance_temp;
+				distance_temp = (distance_temp > DISTANCE_MAX) ? INFINITY : distance_temp;
+				rr_temp = (_SourceList[ii] - _SourceList[jj]) / distance_temp;
+				FORCE[ii] = FORCE[ii] + rr_temp * COULOMB_CONSTANT * CHARGE * CHARGE / (distance_temp * distance_temp);
+			}
 		}
 		_ForceTotal_temp = _ForceTotal_temp + FORCE[ii].Norm();
 	}
@@ -289,10 +291,10 @@ TNode3D<double> HElectroStatic::NormalDirection(int a) {
 		int ll = _SourceLocate[a].size();
 		TNode3D<double> radial_direction(0, 0, 0);
 		for (int ii = 0; ii < ll; ii++) {
-			radial_direction = radial_direction +
-				GetNormal(_FaceList[_SourceLocate[a][ii]][0],
-					_FaceList[_SourceLocate[a][ii]][1],
-					_FaceList[_SourceLocate[a][ii]][2]);
+			TNode3D<double> normal_temp = GetNormal(_FaceList[_SourceLocate[a][ii]][0],
+				_FaceList[_SourceLocate[a][ii]][1],
+				_FaceList[_SourceLocate[a][ii]][2]);
+			radial_direction = radial_direction + normal_temp/normal_temp.Norm();
 		}
 		return (radial_direction / radial_direction.Norm());
 	//}
@@ -305,7 +307,7 @@ TNode3D<double> HElectroStatic::GetNormal(int a, int b, int c) {
 	normal.x = (p2.y - p1.y)*(p3.z - p2.z) - (p2.z - p1.z)*(p3.y - p1.y);
 	normal.y = (p2.z - p1.z)*(p3.x - p1.x) - (p2.x - p1.x)*(p3.z - p1.z);
 	normal.z = (p2.x - p1.x)*(p3.y - p1.y) - (p2.y - p1.y)*(p3.x - p1.x);
-	return normal / normal.Norm();
+	return normal;
 }
 
 // -----------------------------------
@@ -330,6 +332,9 @@ bool HElectroStatic::ProjectionInFace(int a, int b) {
 			SameSide(B, C, D, P) &&
 			SameSide(C, D, A, P) &&
 			SameSide(D, A, B, P);
+	}
+	else {
+		message.Error("Wrong _FaceList size");
 	}
 }
 bool HElectroStatic::SameSide(TNode3D<double> A, TNode3D<double> B, TNode3D<double> C, TNode3D<double> P) {
