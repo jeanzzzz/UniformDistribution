@@ -6,9 +6,9 @@
 
 // Set parameters
 const bool disp = true;
-const double C = 2;
+const double C = 0.5;
 const double FREQUENCY			= 3.0e9;					//Hz
-const double CHARGE				= (5e-7) / pow(C, 1.0 / 2);					//C
+const double CHARGE				= (4e-7) / pow(C, 1.0 / 2);					//C
 //const double CHARGE = (1.0e-6) / C;
 //const double CHARGE = (1.0e-6);
 

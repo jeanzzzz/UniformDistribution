@@ -186,7 +186,7 @@ void HElectroStatic::LocationCorrection_Face(void)
 				}
 			}
 		}
-		if (distance_record < 1) {
+		if (distance_record < 0.1) {
 			_SourceList[ii] = GetProjection(ii, face_record, distance_record);
 			_SourceLocate[ii].clear();
 			_SourceLocate[ii].push_back(face_record);
@@ -304,7 +304,7 @@ TNode3D<double> HElectroStatic::GetNormal(int a, int b, int c) {
 	TNode3D<double> p1 = _NodeList[a]; ///point
 	TNode3D<double> p2 = _NodeList[b];
 	TNode3D<double> p3 = _NodeList[c];
-	normal.x = (p2.y - p1.y)*(p3.z - p2.z) - (p2.z - p1.z)*(p3.y - p1.y);
+	normal.x = (p2.y - p1.y)*(p3.z - p1.z) - (p2.z - p1.z)*(p3.y - p1.y);
 	normal.y = (p2.z - p1.z)*(p3.x - p1.x) - (p2.x - p1.x)*(p3.z - p1.z);
 	normal.z = (p2.x - p1.x)*(p3.y - p1.y) - (p2.y - p1.y)*(p3.x - p1.x);
 	return normal;
