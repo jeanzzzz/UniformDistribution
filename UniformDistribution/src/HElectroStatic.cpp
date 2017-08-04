@@ -117,9 +117,9 @@ double HElectroStatic::NextStatusNear(void)
 		for (int jj = 0; (jj < _NUM); jj++){
 			if (jj != ii) {
 				distance_temp = (_SourceList[ii] - _SourceList[jj]).Norm();
+				rr_temp = (_SourceList[ii] - _SourceList[jj]) / distance_temp;
 				distance_temp = (distance_temp < DISTANCE_MIN) ? DISTANCE_MIN : distance_temp;
 				distance_temp = (distance_temp > DISTANCE_MAX) ? INFINITY : distance_temp;
-				rr_temp = (_SourceList[ii] - _SourceList[jj]) / distance_temp;
 				FORCE[ii] = FORCE[ii] + rr_temp * COULOMB_CONSTANT * CHARGE * CHARGE / (distance_temp * distance_temp);
 			}
 		}
