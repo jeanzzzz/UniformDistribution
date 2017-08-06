@@ -117,9 +117,9 @@ double HElectroStatic::NextStatusNear(void)
 		for (int jj = 0; (jj < _NUM); jj++){
 			if (jj != ii) {
 				distance_temp = (_SourceList[ii] - _SourceList[jj]).Norm();
-				rr_temp = (_SourceList[ii] - _SourceList[jj]) / distance_temp;
 				distance_temp = (distance_temp < DISTANCE_MIN) ? DISTANCE_MIN : distance_temp;
 				distance_temp = (distance_temp > DISTANCE_MAX) ? INFINITY : distance_temp;
+				rr_temp = (_SourceList[ii] - _SourceList[jj]) / distance_temp;
 				FORCE[ii] = FORCE[ii] + rr_temp * COULOMB_CONSTANT * CHARGE * CHARGE / (distance_temp * distance_temp);
 			}
 		}
@@ -304,7 +304,7 @@ TNode3D<double> HElectroStatic::GetNormal(int a, int b, int c) {
 	TNode3D<double> p1 = _NodeList[a]; ///point
 	TNode3D<double> p2 = _NodeList[b];
 	TNode3D<double> p3 = _NodeList[c];
-	normal.x = (p2.y - p1.y)*(p3.z - p1.z) - (p2.z - p1.z)*(p3.y - p1.y);
+	normal.x = (p2.y - p1.y)*(p3.z - p2.z) - (p2.z - p1.z)*(p3.y - p1.y);
 	normal.y = (p2.z - p1.z)*(p3.x - p1.x) - (p2.x - p1.x)*(p3.z - p1.z);
 	normal.z = (p2.x - p1.x)*(p3.y - p1.y) - (p2.y - p1.y)*(p3.x - p1.x);
 	return normal;

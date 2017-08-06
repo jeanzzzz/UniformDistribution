@@ -22,7 +22,7 @@ const double LAMBDA = SPEED_LIGHT / FREQUENCY;	//m
 // Method parameters
 const double STOP_FORCE			= 0.00005;					//N
 const double DENSITY			= 0.1 * C; //lambda-2
-const int REPEATMAX				= 10; 
+const int REPEATMAX				= 100; 
 const int NEARNODE				= 20;
 const int MAXMOVE = 1;
 const double DISTANCE_MAX		= 1;	
