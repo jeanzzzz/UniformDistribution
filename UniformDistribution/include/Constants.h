@@ -6,7 +6,7 @@
 
 // Set parameters
 const bool disp = true;
-const double C = 0.5;
+const double C = 5;
 const double FREQUENCY			= 3.0e9;					//Hz
 const double CHARGE				= (4e-7) / pow(C, 1.0 / 2);					//C
 //const double CHARGE = (1.0e-6) / C;
@@ -22,7 +22,7 @@ const double LAMBDA = SPEED_LIGHT / FREQUENCY;	//m
 // Method parameters
 const double STOP_FORCE			= 0.00005;					//N
 const double DENSITY			= 0.1 * C; //lambda-2
-const int REPEATMAX				= 100; 
+const int REPEATMAX				= 200; 
 const int NEARNODE				= 20;
 const int MAXMOVE = 1;
 const double DISTANCE_MAX		= 1;	

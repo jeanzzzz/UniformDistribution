@@ -165,6 +165,8 @@ TNode3D<double> HPreCal::GetMin(std::vector<TNode3D<double> > &List) {
 
 // ------------------ Get domain ------------------------
 void HPreCal::InitializeDomain(void) {
-
+	
 }
+
+
 

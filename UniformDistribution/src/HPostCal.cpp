@@ -1,4 +1,5 @@
 #include "../include/HPostCal.h"
+#include <vector>
 
 
 HPostCal::HPostCal(void)
@@ -28,6 +29,19 @@ void HPostCal::PostCalculate(void)
 // --------------- Combine elements --------------------
 void HPostCal::CombineElements(void) {
 	_CombineList.resize(_NUM);
+
+	// this part hasn't been used so far, it's written for find connected elements
+	std::vector<int> flag(_NumTri + _NumQua);
+	for (int ii = 0; ii < (_NumTri + _NumQua); ii++) {
+		flag[ii] = ii;
+	}
+	for (int ii = 0; ii < _NUM; ii++) {
+		for (int jj = 0; jj < _SourceLocate[ii].size(); jj++) {
+			_CombineList[ii].push_back(_SourceLocate[ii][jj]);
+			flag[_SourceLocate[ii][jj]] = -1;
+		}
+	}
+
 	for (int ii = 0; ii < (_NumTri + _NumQua); ii++) {
 		TNode3D<double> barycenter = Barycenter(_FaceList[ii]);
 		int closest_source = 0;

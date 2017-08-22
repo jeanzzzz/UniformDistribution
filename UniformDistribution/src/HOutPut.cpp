@@ -43,13 +43,32 @@ void HOutPut::OutPut_CombinedElement(std::string a)
 		message.Error("Error: open txt file" + foutname + " failed!");
 	}
 
+	fout << _NUM << "\n"; //the first line is the number of combined elements
 	for (int ii = 0; ii < _NUM; ii++)
 	{
 		std::vector<int>::iterator t;
+		fout << _CombineList[ii].size() << "\n";
 		for (t = _CombineList[ii].begin(); t != _CombineList[ii].end(); t++)
 			fout << *t << " ";
 		fout << "\n";
 	}
 
 	fout.close();
+}
+
+//-------------------------Output combined element .poly---------------------
+void HOutPut::OutPut_CombinedElement_poly(std::string a)
+{
+	std::string foutname;
+	std::ofstream fout;
+
+	foutname = _PrjName + "_" + std::to_string(int(_NUM)) + "_CE" + ".poly";
+
+	fout.open(foutname.c_str());
+	if (!fout.is_open()) {
+		message.Error("Error: open poly file" + foutname + "failed!");
+	}
+
+	fout << _Unit << "\n";
+	fout << _Unit << _NUM;
 }

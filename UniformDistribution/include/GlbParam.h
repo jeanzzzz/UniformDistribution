@@ -30,7 +30,7 @@ extern int _NUM;
 extern std::vector <TNode3D<REAL> > _NodeList;
 extern std::vector <std::vector<int> > _FaceList;
 
-extern TNode3D<double> _Max;
+extern TNode3D<double> _Max; //(x_max,y_max,z_max)
 extern TNode3D<double> _Min;
 
 extern std::vector <std::vector<std::vector <std::vector <int> > > > _NodeDomain;

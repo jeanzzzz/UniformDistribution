@@ -13,5 +13,6 @@ public:
 
 	void OutPut_source(std::string);
 	void OutPut_CombinedElement(std::string);
+	void OutPut_CombinedElement_poly(std::string);
 };
 

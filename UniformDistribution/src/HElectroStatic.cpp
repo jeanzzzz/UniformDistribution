@@ -20,7 +20,7 @@ void HElectroStatic::Solve(void)
 		message.Display("Start: Loop NO. ", ii);
 		_ForceTotal[ii] = NextStatusNear();
 		message.Display("The Force is ", _ForceTotal[ii]);
-		LocationCorrection_Face();
+		LocationCorrection_Node();
 		//LocationCorrection_Node();
 		message.Display("Finish: Loop NO. ", ii);
 	}
